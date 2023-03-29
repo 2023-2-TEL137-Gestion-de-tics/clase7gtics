@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="fragments/navbar.html :: header( title = 'Transportistas')"></head>
+    <head th:replace="~{fragments/navbar.html :: header( title = 'Transportistas')}"></head>
     <body>
         <div class="container">
-            <nav th:replace="fragments/navbar.html :: navbar( active = 'Shipper')"></nav>
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Shipper')}"></nav>
             <h2>Lista Transportistas</h2>
             <a class="btn btn-primary mt-4 mb-4" th:href="@{'/shipper/new'}">Nuevo Transportista</a>
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
@@ -31,6 +31,6 @@
                 </tr>
             </table>
         </div>
-        <script th:replace="fragments/navbar.html :: footer-bootstrap"></script>
+        <script th:replace="~{fragments/navbar.html :: footer-bootstrap}"></script>
     </body>
 </html>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="fragments/navbar.html :: header( title = 'Empleados')"></head>
+    <head th:replace="~{fragments/navbar.html :: header( title = 'Empleados')}"></head>
     <body>
         <div class="container">
-            <nav th:replace="fragments/navbar.html :: navbar( active = 'Employee')"></nav>
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Employee')}"></nav>
             <h2>Lista de empleados</h2>
             <a class="btn btn-primary mt-4 mb-4" th:href="@{'/employee/new'}">Nuevo Empleado</a>
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
@@ -63,6 +63,6 @@
                 </tr>
             </table>
         </div>
-        <script th:replace="fragments/navbar.html :: footer-bootstrap"></script>
+        <script th:replace="~{fragments/navbar.html :: footer-bootstrap}"></script>
     </body>
 </html>
