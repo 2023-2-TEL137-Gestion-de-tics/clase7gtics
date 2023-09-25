@@ -34,7 +34,7 @@
                         <a th:href="@{/openLoginWindow}">(Iniciar Sesión)</a>
                     </div>
                     <div sec:authorize="isAuthenticated()">
-                        <span th:text="|Bienvenido ${#authentication.name}|"></span>
+                        <span th:text="|Bienvenido ${session.usuario.nombre} ${session.usuario.apellido}|"></span>
                         <form th:action="@{/logout}" method="post">
                             <input class="btn btn-link" type="submit" value="(Cerrar Sesión)">
                         </form>

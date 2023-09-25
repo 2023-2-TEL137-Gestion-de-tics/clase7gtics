@@ -1,8 +1,11 @@
 package com.example.clase7gtics.config;
 
+import com.example.clase7gtics.entity.Usuario;
+import com.example.clase7gtics.repository.UsuarioRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,10 +27,12 @@ import java.io.IOException;
 @Configuration
 public class WebSecurityConfig {
 
+    final UsuarioRepository usuarioRepository;
     final DataSource dataSource;
 
-    public WebSecurityConfig(DataSource dataSource) {
+    public WebSecurityConfig(DataSource dataSource, UsuarioRepository usuarioRepository) {
         this.dataSource = dataSource;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Bean
@@ -46,20 +51,24 @@ public class WebSecurityConfig {
                     DefaultSavedRequest defaultSavedRequest =
                             (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
 
+                    HttpSession session = request.getSession();
+                    session.setAttribute("usuario", usuarioRepository.findByEmail(authentication.getName()));
+
+
                     //si vengo por url -> defaultSR existe
-                    if(defaultSavedRequest != null){
+                    if (defaultSavedRequest != null) {
                         String targetURl = defaultSavedRequest.getRequestURL();
-                        new DefaultRedirectStrategy().sendRedirect(request,response,targetURl);
-                    }else{ //estoy viniendo del botón de login
+                        new DefaultRedirectStrategy().sendRedirect(request, response, targetURl);
+                    } else { //estoy viniendo del botón de login
                         String rol = "";
-                        for(GrantedAuthority role : authentication.getAuthorities()){
+                        for (GrantedAuthority role : authentication.getAuthorities()) {
                             rol = role.getAuthority();
                             break;
                         }
 
-                        if(rol.equals("admin")){
+                        if (rol.equals("admin")) {
                             response.sendRedirect("/shipper");
-                        }else{
+                        } else {
                             response.sendRedirect("/employee");
                         }
                     }
@@ -74,7 +83,10 @@ public class WebSecurityConfig {
                 .requestMatchers("/shipper", "/shipper/**").hasAnyAuthority("admin")
                 .anyRequest().permitAll();
 
-        http.logout().logoutSuccessUrl("/product");
+        http.logout()
+                .logoutSuccessUrl("/product")
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true);
 
         return http.build();
     }
