@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="~{fragments/navbar.html :: header( title = 'Productos')}"></head>
     <body>
         <div class="container">
@@ -30,9 +30,11 @@
                         <td th:text="${product.unitprice}"></td>
                         <td th:text="${product.unitsinstock}"></td>
                         <td th:text="${product.discontinued?'si':'no'}"></td>
-                        <td><a class="btn btn-primary" th:href="@{'/product/edit' + '?id=' + ${product.id}}">Editar</a>
+                        <td sec:authorize="isAuthenticated()">
+                            <a class="btn btn-primary" th:href="@{'/product/edit' + '?id=' + ${product.id}}">Editar</a>
                         </td>
-                        <td><a class="btn btn-danger" th:href="@{'/product/delete' + '?id=' + ${product.id}}">Borrar</a>
+                        <td sec:authorize="hasAnyAuthority('admin')">
+                            <a class="btn btn-danger" th:href="@{'/product/delete' + '?id=' + ${product.id}}">Borrar</a>
                         </td>
                     </tr>
                 </tbody>

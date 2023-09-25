@@ -26,7 +26,7 @@ public class EmployeeController {
         this.employeeRepository = employeeRepository;
     }
 
-    @GetMapping(value = {"", "/", "list"})
+    @GetMapping(value = {"", "/", "/list"})
     public String listarEmpleados(Model model) {
         model.addAttribute("listaEmpleados", employeeRepository.findAll());
         model.addAttribute("listaEmpleadosPorRegion", employeeRepository.obtenerEmpleadosPorRegion());
